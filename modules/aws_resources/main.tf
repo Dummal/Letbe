@@ -38,28 +38,26 @@ resource "aws_kms_key" "aft_key" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "AllowRootAccountAccess"
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::123456789012:root"
+          AWS = "arn:aws:iam::${var.master_account_id}:root"
         }
-        Action    = "kms:*"
-        Resource  = "*"
+        Action = "kms:*"
+        Resource = "*"
       },
       {
-        Sid       = "AllowCloudWatchLogsAccess"
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
-          Service = "logs.amazonaws.com"
+          Service = "logs.${var.region}.amazonaws.com"
         }
-        Action    = [
+        Action = [
           "kms:Encrypt",
           "kms:Decrypt",
           "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
-        Resource  = "*"
+        Resource = "*"
       }
     ]
   })
@@ -67,7 +65,7 @@ resource "aws_kms_key" "aft_key" {
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
-    Name        = "AFT Key"
+    Name        = "AFT KMS Key"
   }
 }
 

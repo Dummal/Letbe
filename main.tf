@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "aft_logs_bucket" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm   = "aws:kms"
+        sse_algorithm     = "aws:kms"
         kms_master_key_id = aws_kms_key.aft_kms_key.arn
       }
     }
@@ -58,7 +58,7 @@ resource "aws_kms_key" "aft_kms_key" {
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
-        Resource  = "*"
+        Resource = "*"
       }
     ]
   })
