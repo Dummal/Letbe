@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "aft_logs" {
   bucket = "aft-logs-bucket"
-  acl    = "private"
 
   versioning {
     enabled = true
@@ -20,13 +19,15 @@ resource "aws_s3_bucket" "aft_logs" {
     ManagedBy   = "Terraform"
     Name        = "AFT Logs"
   }
+}
 
-  block_public_access {
-    block_public_acls       = true
-    block_public_policy     = true
-    ignore_public_acls      = true
-    restrict_public_buckets = true
-  }
+resource "aws_s3_bucket_public_access_block" "aft_logs" {
+  bucket = aws_s3_bucket.aft_logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_kms_key" "aft_key" {
@@ -54,6 +55,7 @@ resource "aws_kms_key" "aft_key" {
         Action    = [
           "kms:Encrypt",
           "kms:Decrypt",
+          "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
@@ -65,7 +67,7 @@ resource "aws_kms_key" "aft_key" {
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
-    Name        = "AFT KMS Key"
+    Name        = "AFT Key"
   }
 }
 

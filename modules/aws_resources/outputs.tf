@@ -1,6 +1,6 @@
 output "s3_bucket_id" {
   value       = aws_s3_bucket.aft_logs.id
-  description = "The ID of the S3 bucket used for storing AFT logs."
+  description = "The ID of the S3 bucket used for AFT logs."
 }
 
 output "kms_key_arn" {

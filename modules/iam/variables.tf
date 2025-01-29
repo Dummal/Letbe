@@ -26,7 +26,7 @@ variable "aft_admin_role_name" {
 }
 
 variable "aft_admin_policy_arn" {
-  description = "ARN of the AWS-managed AdministratorAccess policy for AFT admin role."
+  description = "ARN of the AWS-managed AdministratorAccess policy for the AFT admin role."
   type        = string
   default     = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
