@@ -38,26 +38,27 @@ resource "aws_kms_key" "aft_key" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
+        Sid       = "AllowRootAccountAccess"
+        Effect    = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${var.master_account_id}:root"
+          AWS = "arn:aws:iam::123456789012:root"
         }
-        Action = "kms:*"
-        Resource = "*"
+        Action    = "kms:*"
+        Resource  = "*"
       },
       {
-        Effect = "Allow"
+        Sid       = "AllowCloudWatchLogsAccess"
+        Effect    = "Allow"
         Principal = {
-          Service = "logs.${var.region}.amazonaws.com"
+          Service = "logs.amazonaws.com"
         }
-        Action = [
+        Action    = [
           "kms:Encrypt",
           "kms:Decrypt",
-          "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
-        Resource = "*"
+        Resource  = "*"
       }
     ]
   })

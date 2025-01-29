@@ -85,14 +85,21 @@ variable "enable_control_tower" {
 }
 
 variable "master_account_email" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "control_tower_region" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "output_organization_ids" {
+  type    = bool
+  default = true
+}
+
+variable "manual_control_tower_setup" {
   type    = bool
   default = true
 }
