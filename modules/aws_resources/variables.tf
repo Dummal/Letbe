@@ -25,12 +25,6 @@ variable "cloudwatch_log_group_name" {
   type        = string
 }
 
-variable "log_retention_in_days" {
-  description = "The retention period for CloudWatch logs in days."
-  type        = number
-  default     = 90
-}
-
 variable "master_account_id" {
   description = "The AWS account ID of the master account."
   type        = string
@@ -43,4 +37,10 @@ variable "tags" {
     Environment = "Production"
     ManagedBy   = "Terraform"
   }
+}
+
+variable "log_retention_days" {
+  description = "The retention period for CloudWatch logs in days."
+  type        = number
+  default     = 90
 }

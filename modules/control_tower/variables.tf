@@ -108,3 +108,8 @@ variable "output_organization_ids" {
   type    = bool
   default = true
 }
+
+variable "manual_control_tower_setup" {
+  type    = bool
+  default = true
+}
