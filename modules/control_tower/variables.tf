@@ -3,26 +3,23 @@ variable "enable_aws_organizations" {
   default = true
 }
 
-variable "aws_services_to_integrate" {
-  type    = list(string)
-  default = [
-    "cloudtrail.amazonaws.com",
-    "config.amazonaws.com",
-    "sso.amazonaws.com",
-    "controltower.amazonaws.com"
-  ]
-}
-
-variable "aws_organizations_feature_set" {
+variable "aws_organization_features" {
   type    = string
   default = "ALL"
 }
 
 variable "enabled_policy_types" {
   type    = list(string)
+  default = ["SERVICE_CONTROL_POLICY", "TAG_POLICY"]
+}
+
+variable "organization_services" {
+  type    = list(string)
   default = [
-    "SERVICE_CONTROL_POLICY",
-    "TAG_POLICY"
+    "cloudtrail.amazonaws.com",
+    "config.amazonaws.com",
+    "sso.amazonaws.com",
+    "controltower.amazonaws.com"
   ]
 }
 
@@ -49,7 +46,7 @@ variable "organizational_units" {
   ]
 }
 
-variable "create_service_control_policy" {
+variable "create_scp" {
   type    = bool
   default = true
 }
@@ -59,30 +56,18 @@ variable "scp_name" {
   default = "DenyRootUser"
 }
 
-variable "scp_policy_document" {
+variable "scp_policy" {
   type = object({
-    Version   = string
-    Statement = list(object({
-      Effect    = string
-      Action    = list(string)
-      Resource  = list(string)
-      Principal = object({
-        AWS = string
-      })
-    }))
+    effect    = string
+    actions   = list(string)
+    principal = string
+    condition = map(string)
   })
   default = {
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Deny"
-        Action    = ["*"]
-        Resource  = ["*"]
-        Principal = {
-          AWS = "arn:aws:iam::*:root"
-        }
-      }
-    ]
+    effect    = "Deny"
+    actions   = ["*"]
+    principal = "arn:aws:iam::*:root"
+    condition = {}
   }
 }
 
