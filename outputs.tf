@@ -82,4 +82,4 @@ output "aft_admin_role_arn" {
 }
 ```
 
-This `outputs.tf` file defines all the outputs for the resources and modules described in the Terraform script. Each output includes a description and references the appropriate module or resource to retrieve the value.
+This `outputs.tf` file defines all the outputs for the resources and modules mentioned in the Terraform script. Each output includes a description and references the appropriate resource or module attribute.

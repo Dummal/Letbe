@@ -61,4 +61,4 @@ variable "aft_logs_bucket_name" {
 }
 ```
 
-This `variables.tf` file defines all the variables required for the Terraform script, including their descriptions, types, and default values where applicable.
+This `variables.tf` file defines all the required variables for the Terraform script, including their descriptions, types, and default values where applicable.

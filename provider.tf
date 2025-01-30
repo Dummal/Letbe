@@ -12,15 +12,50 @@ provider "aws" {
     role_arn = "arn:aws:iam::${var.master_account_id}:role/OrganizationAccountAccessRole"
   }
 }
+
+provider "aws" {
+  alias  = "security"
+  region = var.aws_region
+  assume_role {
+    role_arn = "arn:aws:iam::${var.security_account_id}:role/OrganizationAccountAccessRole"
+  }
+}
+
+provider "aws" {
+  alias  = "audit"
+  region = var.aws_region
+  assume_role {
+    role_arn = "arn:aws:iam::${var.audit_account_id}:role/OrganizationAccountAccessRole"
+  }
+}
+
+provider "aws" {
+  alias  = "dev"
+  region = var.aws_region
+  assume_role {
+    role_arn = "arn:aws:iam::${var.dev_account_id}:role/OrganizationAccountAccessRole"
+  }
+}
+
+provider "aws" {
+  alias  = "prod"
+  region = var.aws_region
+  assume_role {
+    role_arn = "arn:aws:iam::${var.prod_account_id}:role/OrganizationAccountAccessRole"
+  }
+}
 ```
 
 ### Explanation:
 1. **Default AWS Provider**:
-   - The first `provider "aws"` block sets up the default AWS provider using the `aws_region` variable.
-   - This is used for creating resources in the specified AWS region.
+   - The default provider is configured with the `aws_region` variable to set the region.
 
-2. **Master Account AWS Provider**:
-   - The second `provider "aws"` block is configured with an alias (`master`) to assume a role in the master account.
-   - The `assume_role` block specifies the ARN of the role to assume in the master account, using the `master_account_id` variable and the standard `OrganizationAccountAccessRole`.
+2. **Aliased Providers**:
+   - Additional providers are defined with aliases (`master`, `security`, `audit`, `dev`, `prod`) to interact with different AWS accounts.
+   - Each aliased provider uses the `assume_role` block to assume the `OrganizationAccountAccessRole` in the respective account.
 
-This configuration ensures that Terraform can manage resources both in the default AWS account and in the master account of the AWS Organization.
+3. **Variables Used**:
+   - `var.aws_region`: Specifies the AWS region.
+   - `var.master_account_id`, `var.security_account_id`, `var.audit_account_id`, `var.dev_account_id`, `var.prod_account_id`: These variables hold the account IDs for the respective accounts.
+
+This `provider.tf` file ensures that Terraform can manage resources across multiple AWS accounts by assuming roles in each account.

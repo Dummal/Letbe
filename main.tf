@@ -16,15 +16,15 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Control Tower Module
 module "control_tower" {
   source = "./modules/control_tower"
 
   enable_control_tower = var.enable_control_tower
   master_account_email = var.master_account_email
   master_account_id    = var.master_account_id
-
   organizational_units = var.organizational_units
+  security_account_email = var.security_account_email
+  audit_account_email    = var.audit_account_email
 
   tags = {
     Environment = "Production"
@@ -32,7 +32,6 @@ module "control_tower" {
   }
 }
 
-# IAM Module
 module "iam" {
   source = "./modules/iam"
 
@@ -44,7 +43,6 @@ module "iam" {
   }
 }
 
-# AWS Resources Module
 module "aws_resources" {
   source = "./modules/aws_resources"
 
@@ -56,7 +54,6 @@ module "aws_resources" {
   }
 }
 
-# AWS Organization Accounts
 resource "aws_organizations_account" "dev_account" {
   name      = "DevAccount"
   email     = var.dev_account_email
@@ -91,4 +88,14 @@ resource "aws_organizations_account" "shared_account" {
 }
 ```
 
-This `main.tf` file includes the setup for the Control Tower, IAM, and AWS resources modules, as well as the creation of AWS Organization accounts (Dev, Prod, and Shared). It also ensures that all resources are tagged appropriately for identification and management.
+This `main.tf` file includes the following:
+1. **Terraform Configuration**: Specifies the required provider (`aws`) and Terraform version.
+2. **Provider Block**: Configures the AWS provider with the region specified in the `var.aws_region` variable.
+3. **Modules**:
+   - `control_tower`: Sets up AWS Control Tower and organizational units.
+   - `iam`: Creates IAM roles and policies.
+   - `aws_resources`: Creates AWS infrastructure resources like S3, KMS, SNS, DynamoDB, and CloudWatch Log Group.
+4. **AWS Organization Accounts**: Creates Dev, Prod, and Shared accounts under the Security OU.
+5. **Tags**: Adds `Environment` and `ManagedBy` tags to all resources for identification.
+
+Let me know if you need additional files like `variables.tf` or `outputs.tf`!

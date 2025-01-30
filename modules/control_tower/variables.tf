@@ -1,11 +1,16 @@
+Below is the `variables.tf` file based on the provided user inputs:
+
+```hcl
 variable "enable_aws_organizations" {
-  type    = bool
-  default = true
+  description = "Enable AWS Organizations and create an organization"
+  type        = bool
+  default     = true
 }
 
 variable "aws_services_to_integrate" {
-  type    = list(string)
-  default = [
+  description = "List of AWS services to integrate with the organization"
+  type        = list(string)
+  default     = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
     "sso.amazonaws.com",
@@ -13,98 +18,110 @@ variable "aws_services_to_integrate" {
   ]
 }
 
-variable "aws_organizations_feature_set" {
-  type    = string
-  default = "ALL"
+variable "organization_feature_set" {
+  description = "Feature set for AWS Organizations"
+  type        = string
+  default     = "ALL"
 }
 
 variable "enabled_policy_types" {
-  type    = list(string)
-  default = [
+  description = "Policy types to enable in the organization"
+  type        = list(string)
+  default     = [
     "SERVICE_CONTROL_POLICY",
     "TAG_POLICY"
   ]
 }
 
 variable "organizational_units" {
-  type = list(object({
-    name = string
-    tags = map(string)
-  }))
-  default = [
-    {
-      name = "Security"
-      tags = {
-        Environment = "Production"
-        Purpose     = "Security"
-      }
-    },
-    {
-      name = "Audit Log"
-      tags = {
-        Environment = "Production"
-        Purpose     = "Audit"
-      }
-    }
+  description = "List of Organizational Units (OUs) to create"
+  type        = list(string)
+  default     = [
+    "Security",
+    "Audit Log"
   ]
 }
 
-variable "create_service_control_policy" {
-  type    = bool
-  default = true
-}
-
-variable "scp_name" {
-  type    = string
-  default = "DenyRootUser"
-}
-
-variable "scp_policy_document" {
-  type = object({
-    Version   = string
-    Statement = list(object({
-      Effect    = string
-      Action    = list(string)
-      Resource  = list(string)
-      Principal = object({
-        AWS = string
-      })
-    }))
-  })
-  default = {
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Deny"
-        Action    = ["*"]
-        Resource  = ["*"]
-        Principal = {
-          AWS = "arn:aws:iam::*:root"
-        }
-      }
-    ]
+variable "ou_tags" {
+  description = "Tags to add to Organizational Units (OUs)"
+  type        = map(map(string))
+  default     = {
+    "Security" = {
+      "Environment" = "Production",
+      "Purpose"     = "Security"
+    }
+    "Audit Log" = {
+      "Environment" = "Production",
+      "Purpose"     = "Audit"
+    }
   }
 }
 
+variable "create_scp" {
+  description = "Whether to create a Service Control Policy (SCP)"
+  type        = bool
+  default     = true
+}
+
+variable "scp_name" {
+  description = "Name of the Service Control Policy (SCP)"
+  type        = string
+  default     = "DenyRootUser"
+}
+
+variable "scp_policy" {
+  description = "Policy document for the Service Control Policy (SCP)"
+  type        = string
+  default     = jsonencode({
+    "Version"   : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect"    : "Deny",
+        "Action"    : "*",
+        "Resource"  : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:PrincipalArn" : "arn:aws:iam::*:root"
+          }
+        }
+      }
+    ]
+  })
+}
+
 variable "scp_attachment_target" {
-  type    = string
-  default = "root"
+  description = "Where to attach the Service Control Policy (SCP)"
+  type        = string
+  default     = "root"
 }
 
 variable "enable_control_tower" {
-  type    = bool
-  default = true
+  description = "Enable AWS Control Tower"
+  type        = bool
+  default     = true
 }
 
 variable "master_account_email" {
-  type = string
+  description = "Email address for the master account"
+  type        = string
 }
 
 variable "control_tower_region" {
-  type = string
+  description = "AWS region to deploy the Control Tower landing zone"
+  type        = string
 }
 
 variable "output_organization_ids" {
-  type    = bool
-  default = true
+  description = "Whether to output organization and OU IDs"
+  type        = bool
+  default     = true
 }
+
+variable "manual_control_tower_setup" {
+  description = "Whether Control Tower setup should be manually enabled after Terraform applies"
+  type        = bool
+  default     = true
+}
+```
+
+This `variables.tf` file defines all the necessary variables based on the user inputs, including default values where applicable. You can use this file in your Terraform configuration to parameterize the setup.
