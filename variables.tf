@@ -58,7 +58,7 @@ variable "aft_logs_bucket_name" {
 }
 
 variable "kms_key_rotation_enabled" {
-  description = "Flag to enable key rotation for the KMS key."
+  description = "Flag to enable KMS key rotation."
   type        = bool
   default     = true
 }
