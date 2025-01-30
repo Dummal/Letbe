@@ -64,7 +64,7 @@ resource "aws_kms_key" "aft_key" {
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
-    Name        = "AFT Key"
+    Name        = "AFT KMS Key"
   }
 }
 
@@ -94,13 +94,13 @@ resource "aws_dynamodb_table" "aft_requests" {
     type = "S"
   }
 
+  point_in_time_recovery {
+    enabled = true
+  }
+
   server_side_encryption {
     enabled     = true
     kms_key_arn = aws_kms_key.aft_key.arn
-  }
-
-  point_in_time_recovery {
-    enabled = true
   }
 
   tags = {
