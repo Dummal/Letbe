@@ -53,6 +53,7 @@ resource "aws_kms_key" "aft_key" {
         Action    = [
           "kms:Encrypt",
           "kms:Decrypt",
+          "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]

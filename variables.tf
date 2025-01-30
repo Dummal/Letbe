@@ -21,7 +21,7 @@ variable "master_account_id" {
 }
 
 variable "organizational_units" {
-  description = "List of organizational units to create."
+  description = "List of organizational units to create in AWS Control Tower."
   type        = list(string)
   default     = ["Security", "Audit Log", "Sandbox"]
 }

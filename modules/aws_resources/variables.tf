@@ -31,7 +31,7 @@ variable "master_account_id" {
 }
 
 variable "tags" {
-  description = "A map of tags to apply to all resources."
+  description = "A map of tags to apply to all AWS resources."
   type        = map(string)
   default = {
     Environment = "Production"

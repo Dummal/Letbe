@@ -14,16 +14,23 @@ resource "aws_s3_bucket" "aft_logs_bucket" {
     }
   }
 
-  block_public_access {
+  tags = {
+    Environment = "Production"
+    ManagedBy   = "Terraform"
+  }
+
+  lifecycle_rule {
+    enabled = true
+    noncurrent_version_expiration {
+      days = 30
+    }
+  }
+
+  public_access_block {
     block_public_acls       = true
     block_public_policy     = true
     ignore_public_acls      = true
     restrict_public_buckets = true
-  }
-
-  tags = {
-    Environment = "Production"
-    ManagedBy   = "Terraform"
   }
 }
 
