@@ -1,6 +1,5 @@
 resource "aws_iam_role" "aft_lambda_execution_role" {
   name = "aft-lambda-execution-role"
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -13,7 +12,6 @@ resource "aws_iam_role" "aft_lambda_execution_role" {
       }
     ]
   })
-
   tags = {
     Purpose   = "AFT"
     ManagedBy = "Terraform"
@@ -25,32 +23,9 @@ resource "aws_iam_role_policy_attachment" "aft_lambda_execution_policy_attachmen
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_role" "aft_account_provisioning_role" {
-  name = "aft-account-provisioning-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "organizations.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-
-  tags = {
-    Purpose   = "AFT"
-    ManagedBy = "Terraform"
-  }
-}
-
 resource "aws_iam_policy" "aft_account_provisioning_policy" {
   name        = "aft-account-provisioning-policy"
-  description = "Policy for managing accounts in AWS Organizations"
-
+  description = "Policy for managing accounts in AWS Organizations for AFT"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -66,7 +41,26 @@ resource "aws_iam_policy" "aft_account_provisioning_policy" {
       }
     ]
   })
+  tags = {
+    Purpose   = "AFT"
+    ManagedBy = "Terraform"
+  }
+}
 
+resource "aws_iam_role" "aft_account_provisioning_role" {
+  name = "aft-account-provisioning-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "organizations.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
   tags = {
     Purpose   = "AFT"
     ManagedBy = "Terraform"
@@ -80,7 +74,6 @@ resource "aws_iam_role_policy_attachment" "aft_account_provisioning_policy_attac
 
 resource "aws_iam_role" "aft_admin_role" {
   name = "aft-admin-role"
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -98,7 +91,6 @@ resource "aws_iam_role" "aft_admin_role" {
       }
     ]
   })
-
   tags = {
     Purpose   = "AFT"
     ManagedBy = "Terraform"
