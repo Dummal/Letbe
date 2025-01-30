@@ -1,7 +1,7 @@
 aws_region = "us-east-1"
 enable_control_tower = true
 master_account_email = "sindhuc393@gmail.com"
-master_account_id = "900000600000"
+master_account_id = "578551570434"
 dev_account_email = "sindhuc393@gmail.com"
 prod_account_email = "sindhuc393@gmail.com"
 shared_account_email = "sindhuc393@gmail.com"
