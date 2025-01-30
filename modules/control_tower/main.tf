@@ -46,6 +46,11 @@ resource "aws_organizations_policy" "deny_root_user" {
         Resource  = "*",
         Principal = {
           AWS = "arn:aws:iam::*:root"
+        },
+        Condition = {
+          Bool = {
+            "aws:MultiFactorAuthPresent" = "false"
+          }
         }
       }
     ]
@@ -54,7 +59,7 @@ resource "aws_organizations_policy" "deny_root_user" {
   type = "SERVICE_CONTROL_POLICY"
 }
 
-resource "aws_organizations_policy_attachment" "deny_root_user_to_root" {
+resource "aws_organizations_policy_attachment" "deny_root_user_attachment" {
   policy_id = aws_organizations_policy.deny_root_user.id
   target_id = aws_organizations_organization.this.roots[0].id
 }
