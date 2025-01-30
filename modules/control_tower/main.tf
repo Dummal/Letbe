@@ -40,12 +40,12 @@ resource "aws_organizations_policy" "deny_root_user" {
   type        = "SERVICE_CONTROL_POLICY"
 
   content = jsonencode({
-    Version = "2012-10-17",
+    Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Deny",
-        Action    = "*",
-        Resource  = "*",
+        Effect    = "Deny"
+        Action    = "*"
+        Resource  = "*"
         Principal = {
           AWS = "arn:aws:iam::*:root"
         }

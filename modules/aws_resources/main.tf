@@ -14,20 +14,18 @@ resource "aws_s3_bucket" "aft_logs" {
     }
   }
 
+  block_public_access {
+    block_public_acls       = true
+    block_public_policy     = true
+    ignore_public_acls      = true
+    restrict_public_buckets = true
+  }
+
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
     Name        = "AFT Logs"
   }
-}
-
-resource "aws_s3_bucket_public_access_block" "aft_logs" {
-  bucket = aws_s3_bucket.aft_logs.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 resource "aws_kms_key" "aft_key" {
@@ -55,7 +53,6 @@ resource "aws_kms_key" "aft_key" {
         Action    = [
           "kms:Encrypt",
           "kms:Decrypt",
-          "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
@@ -67,7 +64,7 @@ resource "aws_kms_key" "aft_key" {
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
-    Name        = "AFT KMS Key"
+    Name        = "AFT Key"
   }
 }
 
@@ -97,13 +94,13 @@ resource "aws_dynamodb_table" "aft_requests" {
     type = "S"
   }
 
-  point_in_time_recovery {
-    enabled = true
-  }
-
   server_side_encryption {
     enabled     = true
     kms_key_arn = aws_kms_key.aft_key.arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = {
