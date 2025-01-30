@@ -26,7 +26,7 @@ variable "aft_admin_role_name" {
 }
 
 variable "aft_admin_policy_arn" {
-  description = "ARN of the AWS-managed AdministratorAccess policy for the AFT admin role."
+  description = "ARN of the AWS-managed policy for AFT Admin role."
   type        = string
   default     = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
@@ -40,7 +40,7 @@ variable "iam_resource_tags" {
   description = "Tags to attach to all IAM resources for identification."
   type        = map(string)
   default     = {
-    Purpose    = "AFT"
-    ManagedBy  = "Terraform"
+    Purpose   = "AFT"
+    ManagedBy = "Terraform"
   }
 }
