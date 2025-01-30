@@ -54,7 +54,7 @@ resource "aws_organizations_policy" "deny_root_user" {
   })
 }
 
-resource "aws_organizations_policy_attachment" "deny_root_user_attachment" {
+resource "aws_organizations_policy_attachment" "deny_root_user_to_root" {
   policy_id = aws_organizations_policy.deny_root_user.id
   target_id = aws_organizations_organization.this.roots[0].id
 }
