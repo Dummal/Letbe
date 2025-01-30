@@ -58,7 +58,7 @@ variable "aft_logs_bucket_name" {
 }
 
 variable "kms_key_rotation_enabled" {
-  description = "Flag to enable KMS key rotation."
+  description = "Flag to enable key rotation for the KMS key."
   type        = bool
   default     = true
 }
@@ -87,7 +87,7 @@ variable "cloudwatch_log_retention_days" {
   default     = 90
 }
 
-variable "resource_tags" {
+variable "tags" {
   description = "Tags to apply to all resources."
   type        = map(string)
   default     = {

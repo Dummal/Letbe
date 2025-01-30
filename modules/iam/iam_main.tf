@@ -49,7 +49,7 @@ resource "aws_iam_role" "aft_account_provisioning_role" {
 
 resource "aws_iam_policy" "aft_account_provisioning_policy" {
   name        = "aft-account-provisioning-policy"
-  description = "Policy for managing accounts in AWS Organizations for AFT"
+  description = "Policy for managing accounts in AWS Organizations"
 
   policy = jsonencode({
     Version = "2012-10-17"
