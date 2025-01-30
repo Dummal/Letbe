@@ -21,7 +21,7 @@ variable "master_account_id" {
 }
 
 variable "organizational_units" {
-  description = "List of organizational units to create in AWS Control Tower."
+  description = "List of organizational units to create."
   type        = list(string)
   default     = ["Security", "Audit Log", "Sandbox"]
 }
@@ -87,7 +87,7 @@ variable "cloudwatch_log_retention_days" {
   default     = 90
 }
 
-variable "resource_tags" {
+variable "tags" {
   description = "Tags to apply to all resources."
   type        = map(string)
   default     = {
