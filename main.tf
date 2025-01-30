@@ -1,74 +1,30 @@
-resource "aws_s3_bucket" "aft_logs_bucket" {
-  bucket = "aft-logs-bucket-863518414447"
+Below is the exact `main.tf` file generated based on the details provided in the {terraform script}:
 
-  versioning {
-    enabled = true
-  }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm     = "aws:kms"
-        kms_master_key_id = aws_kms_key.aft_kms_key.arn
-      }
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
     }
   }
 
-  tags = {
-    Environment = "Production"
-    ManagedBy   = "Terraform"
-  }
-
-  lifecycle_rule {
-    enabled = true
-    noncurrent_version_expiration {
-      days = 30
-    }
-  }
-
-  public_access_block {
-    block_public_acls       = true
-    block_public_policy     = true
-    ignore_public_acls      = true
-    restrict_public_buckets = true
-  }
+  required_version = ">= 1.3.0"
 }
 
-resource "aws_kms_key" "aft_kms_key" {
-  description             = "KMS key for AFT resources"
-  enable_key_rotation     = true
-  deletion_window_in_days = 30
+provider "aws" {
+  region = var.aws_region
+}
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Id      = "key-default-1"
-    Statement = [
-      {
-        Sid       = "Enable IAM User Permissions"
-        Effect    = "Allow"
-        Principal = {
-          AWS = "arn:aws:iam::863518414447:root"
-        }
-        Action    = "kms:*"
-        Resource  = "*"
-      },
-      {
-        Sid       = "Allow CloudWatch Logs"
-        Effect    = "Allow"
-        Principal = {
-          Service = "logs.us-west-2.amazonaws.com"
-        }
-        Action    = [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:ReEncrypt*",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
-        ]
-        Resource  = "*"
-      }
-    ]
-  })
+module "control_tower" {
+  source = "./modules/control_tower"
+
+  enable_control_tower = var.enable_control_tower
+  master_account_email = var.master_account_email
+  master_account_id    = var.master_account_id
+  organizational_units = var.organizational_units
+  security_account_email = var.security_account_email
+  audit_account_email    = var.audit_account_email
 
   tags = {
     Environment = "Production"
@@ -76,9 +32,10 @@ resource "aws_kms_key" "aft_kms_key" {
   }
 }
 
-resource "aws_sns_topic" "aft_notifications" {
-  name              = "aft-notifications"
-  kms_master_key_id = aws_kms_key.aft_kms_key.arn
+module "iam" {
+  source = "./modules/iam"
+
+  master_account_id = var.master_account_id
 
   tags = {
     Environment = "Production"
@@ -86,23 +43,10 @@ resource "aws_sns_topic" "aft_notifications" {
   }
 }
 
-resource "aws_dynamodb_table" "aft_requests" {
-  name           = "aft-requests"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "id"
-  point_in_time_recovery {
-    enabled = true
-  }
+module "aws_resources" {
+  source = "./modules/aws_resources"
 
-  attribute {
-    name = "id"
-    type = "S"
-  }
-
-  server_side_encryption {
-    enabled     = true
-    kms_key_arn = aws_kms_key.aft_kms_key.arn
-  }
+  aft_logs_bucket_name = var.aft_logs_bucket_name
 
   tags = {
     Environment = "Production"
@@ -110,13 +54,45 @@ resource "aws_dynamodb_table" "aft_requests" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "aft_logs" {
-  name              = "/aws/aft/logs"
-  retention_in_days = 90
-  kms_key_id        = aws_kms_key.aft_kms_key.arn
+resource "aws_organizations_account" "dev_account" {
+  name      = "DevAccount"
+  email     = var.dev_account_email
+  parent_id = module.control_tower.security_ou_id
 
   tags = {
     Environment = "Production"
     ManagedBy   = "Terraform"
   }
 }
+
+resource "aws_organizations_account" "prod_account" {
+  name      = "ProdAccount"
+  email     = var.prod_account_email
+  parent_id = module.control_tower.security_ou_id
+
+  tags = {
+    Environment = "Production"
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_organizations_account" "shared_account" {
+  name      = "SharedAccount"
+  email     = var.shared_account_email
+  parent_id = module.control_tower.security_ou_id
+
+  tags = {
+    Environment = "Production"
+    ManagedBy   = "Terraform"
+  }
+}
+```
+
+This `main.tf` file includes the following:
+1. **Terraform and AWS provider configuration**: Specifies the required provider and version.
+2. **Control Tower module**: Sets up AWS Control Tower with organizational units and accounts.
+3. **IAM module**: Creates IAM roles and policies.
+4. **AWS Resources module**: Creates infrastructure resources like S3, KMS, SNS, DynamoDB, and CloudWatch.
+5. **AWS Organization accounts**: Creates Dev, Prod, and Shared accounts under the Security OU.
+
+Make sure to include the corresponding `variables.tf` and `outputs.tf` files to define the required variables and outputs for this configuration.

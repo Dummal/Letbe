@@ -3,8 +3,8 @@ variable "aft_lambda_execution_role_name" {
   type        = string
 }
 
-variable "aft_lambda_execution_policy_arn" {
-  description = "The ARN of the AWS-managed policy for AFT Lambda execution role."
+variable "aft_lambda_execution_role_policy_arn" {
+  description = "The ARN of the AWS-managed policy to attach to the AFT Lambda execution role."
   type        = string
   default     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
@@ -20,18 +20,29 @@ variable "aft_account_provisioning_policy_name" {
   default     = "aft-account-provisioning-policy"
 }
 
+variable "aft_account_provisioning_policy_document" {
+  description = "The JSON policy document for the AFT account provisioning role."
+  type        = string
+}
+
 variable "aft_admin_role_name" {
   description = "The name of the IAM Admin role for managing AFT."
   type        = string
 }
 
-variable "aft_admin_policy_arn" {
-  description = "The ARN of the AWS-managed AdministratorAccess policy for the AFT admin role."
+variable "aft_admin_role_policy_arn" {
+  description = "The ARN of the AWS-managed policy to attach to the AFT admin role."
   type        = string
   default     = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-variable "master_account_id" {
+variable "aft_admin_role_mfa_required" {
+  description = "Indicates whether MFA is required for assuming the AFT admin role."
+  type        = bool
+  default     = true
+}
+
+variable "aft_admin_role_trusted_account_id" {
   description = "The account ID of the master account allowed to assume the AFT admin role."
   type        = string
 }
@@ -43,4 +54,22 @@ variable "iam_resource_tags" {
     Purpose   = "AFT"
     ManagedBy = "Terraform"
   }
+}
+
+variable "output_aft_execution_role_arn" {
+  description = "The ARN of the AFT Lambda execution role to output."
+  type        = bool
+  default     = true
+}
+
+variable "output_aft_account_provisioning_role_arn" {
+  description = "The ARN of the AFT account provisioning role to output."
+  type        = bool
+  default     = true
+}
+
+variable "output_aft_admin_role_arn" {
+  description = "The ARN of the AFT admin role to output."
+  type        = bool
+  default     = true
 }

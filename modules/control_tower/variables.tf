@@ -59,30 +59,18 @@ variable "scp_name" {
   default = "DenyRootUser"
 }
 
-variable "scp_policy_document" {
+variable "scp_policy" {
   type = object({
-    Version   = string
-    Statement = list(object({
-      Effect    = string
-      Action    = list(string)
-      Resource  = list(string)
-      Principal = object({
-        AWS = string
-      })
-    }))
+    effect    = string
+    actions   = list(string)
+    principal = string
+    condition = map(string)
   })
   default = {
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Deny"
-        Action    = ["*"]
-        Resource  = ["*"]
-        Principal = {
-          AWS = "arn:aws:iam::*:root"
-        }
-      }
-    ]
+    effect    = "Deny"
+    actions   = ["*"]
+    principal = "arn:aws:iam::*:root"
+    condition = {}
   }
 }
 
@@ -105,11 +93,6 @@ variable "control_tower_region" {
 }
 
 variable "output_organization_ids" {
-  type    = bool
-  default = true
-}
-
-variable "manual_control_tower_setup" {
   type    = bool
   default = true
 }
