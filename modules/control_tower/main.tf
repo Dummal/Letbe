@@ -40,7 +40,7 @@ resource "aws_organizations_policy" "deny_root_user" {
   type        = "SERVICE_CONTROL_POLICY"
 
   content = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       {
         Effect    = "Deny"
@@ -54,7 +54,7 @@ resource "aws_organizations_policy" "deny_root_user" {
   })
 }
 
-resource "aws_organizations_policy_attachment" "deny_root_user_to_root" {
+resource "aws_organizations_policy_attachment" "deny_root_user_attachment" {
   policy_id = aws_organizations_policy.deny_root_user.id
   target_id = aws_organizations_organization.this.roots[0].id
 }

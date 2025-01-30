@@ -1,13 +1,13 @@
 resource "aws_iam_role" "aft_lambda_execution_role" {
   name = "aft-lambda-execution-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Principal = {
           Service = "lambda.amazonaws.com"
-        }
+        },
         Action = "sts:AssumeRole"
       }
     ]
@@ -25,18 +25,18 @@ resource "aws_iam_role_policy_attachment" "aft_lambda_execution_policy_attachmen
 
 resource "aws_iam_policy" "aft_account_provisioning_policy" {
   name        = "aft-account-provisioning-policy"
-  description = "Policy for managing accounts in AWS Organizations for AFT"
+  description = "Policy for managing accounts in AWS Organizations"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow"
+        Effect   = "Allow",
         Action   = [
           "organizations:CreateAccount",
           "organizations:ListAccounts",
           "organizations:MoveAccount",
           "iam:CreateServiceLinkedRole"
-        ]
+        ],
         Resource = "*"
       }
     ]
@@ -50,13 +50,13 @@ resource "aws_iam_policy" "aft_account_provisioning_policy" {
 resource "aws_iam_role" "aft_account_provisioning_role" {
   name = "aft-account-provisioning-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Principal = {
           Service = "organizations.amazonaws.com"
-        }
+        },
         Action = "sts:AssumeRole"
       }
     ]
@@ -75,14 +75,14 @@ resource "aws_iam_role_policy_attachment" "aft_account_provisioning_policy_attac
 resource "aws_iam_role" "aft_admin_role" {
   name = "aft-admin-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Principal = {
           AWS = "arn:aws:iam::${var.master_account_id}:root"
-        }
-        Action = "sts:AssumeRole"
+        },
+        Action = "sts:AssumeRole",
         Condition = {
           Bool = {
             "aws:MultiFactorAuthPresent" = "true"

@@ -36,45 +36,23 @@ variable "organizational_units" {
   ]
 }
 
-variable "enabled_services" {
-  type    = list(string)
+variable "service_control_policies" {
+  type = list(object({
+    name       = string
+    statement  = map(any)
+    attachment = string
+  }))
   default = [
-    "cloudtrail.amazonaws.com",
-    "config.amazonaws.com",
-    "sso.amazonaws.com",
-    "controltower.amazonaws.com"
-  ]
-}
-
-variable "create_service_control_policy" {
-  type    = bool
-  default = true
-}
-
-variable "service_control_policy" {
-  type = object({
-    name      = string
-    statement = object({
-      effect    = string
-      action    = list(string)
-      principal = string
-    })
-    conditions = map(any)
-  })
-  default = {
-    name      = "DenyRootUser"
-    statement = {
-      effect    = "Deny"
-      action    = ["*"]
-      principal = "arn:aws:iam::*:root"
+    {
+      name       = "DenyRootUser"
+      statement  = {
+        Effect    = "Deny"
+        Action    = "*"
+        Principal = "arn:aws:iam::*:root"
+      }
+      attachment = "root"
     }
-    conditions = {}
-  }
-}
-
-variable "scp_attachment_target" {
-  type    = string
-  default = "root"
+  ]
 }
 
 variable "enable_control_tower" {

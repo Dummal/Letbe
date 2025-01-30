@@ -40,7 +40,7 @@ variable "iam_resource_tags" {
   description = "Tags to attach to all IAM resources for identification."
   type        = map(string)
   default     = {
-    Purpose    = "AFT"
-    ManagedBy  = "Terraform"
+    Purpose   = "AFT"
+    ManagedBy = "Terraform"
   }
 }
