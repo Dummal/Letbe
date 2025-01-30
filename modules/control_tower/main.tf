@@ -37,8 +37,10 @@ resource "aws_organizations_organizational_unit" "audit_log" {
 resource "aws_organizations_policy" "deny_root_user" {
   name        = "DenyRootUser"
   description = "Deny all actions for root user"
-  content     = jsonencode({
-    Version   = "2012-10-17",
+  type        = "SERVICE_CONTROL_POLICY"
+
+  content = jsonencode({
+    Version = "2012-10-17",
     Statement = [
       {
         Effect    = "Deny",
@@ -46,17 +48,10 @@ resource "aws_organizations_policy" "deny_root_user" {
         Resource  = "*",
         Principal = {
           AWS = "arn:aws:iam::*:root"
-        },
-        Condition = {
-          Bool = {
-            "aws:MultiFactorAuthPresent" = "false"
-          }
         }
       }
     ]
   })
-
-  type = "SERVICE_CONTROL_POLICY"
 }
 
 resource "aws_organizations_policy_attachment" "deny_root_user_attachment" {

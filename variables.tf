@@ -87,7 +87,7 @@ variable "cloudwatch_log_retention_days" {
   default     = 90
 }
 
-variable "resource_tags" {
+variable "tags" {
   description = "Tags to apply to all resources."
   type        = map(string)
   default     = {
