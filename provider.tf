@@ -48,14 +48,13 @@ provider "aws" {
 
 ### Explanation:
 1. **Default AWS Provider**:
-   - The default provider is configured with the `aws_region` variable.
+   - The default provider is configured to use the `aws_region` variable for the region.
 
 2. **Aliased Providers**:
    - Additional providers are defined with aliases (`master`, `security`, `audit`, `dev`, `prod`) to interact with specific AWS accounts.
-   - Each aliased provider uses the `assume_role` block to assume the `OrganizationAccountAccessRole` in the respective accounts.
+   - Each aliased provider assumes a role (`OrganizationAccountAccessRole`) in the respective account using the account ID variables (`master_account_id`, `security_account_id`, etc.).
 
-3. **Variables Used**:
-   - `var.aws_region`: Specifies the AWS region.
-   - `var.master_account_id`, `var.security_account_id`, `var.audit_account_id`, `var.dev_account_id`, `var.prod_account_id`: These variables hold the account IDs for the respective accounts.
+3. **Assume Role**:
+   - The `assume_role` block is used to allow Terraform to assume the necessary IAM roles in the target accounts for managing resources.
 
-This `provider.tf` ensures that Terraform can manage resources across multiple AWS accounts by assuming roles in each account.
+Make sure the corresponding variables (`aws_region`, `master_account_id`, `security_account_id`, `audit_account_id`, `dev_account_id`, `prod_account_id`) are defined in your `variables.tf` or provided during runtime.

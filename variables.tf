@@ -8,7 +8,7 @@ variable "aws_region" {
 }
 
 variable "enable_control_tower" {
-  description = "Flag to enable or disable AWS Control Tower."
+  description = "Flag to enable AWS Control Tower."
   type        = bool
   default     = true
 }
@@ -59,6 +59,15 @@ variable "aft_logs_bucket_name" {
   type        = string
   default     = "aft-logs-bucket-863518414447"
 }
-``` 
 
-This `variables.tf` file defines all the required variables for the Terraform script, including their descriptions, types, and default values where applicable.
+variable "tags" {
+  description = "Tags to apply to all resources."
+  type        = map(string)
+  default     = {
+    Environment = "Production"
+    ManagedBy   = "Terraform"
+  }
+}
+```
+
+This `variables.tf` file defines all the variables required for the Terraform script, including their descriptions, types, and default values where applicable.

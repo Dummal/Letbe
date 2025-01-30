@@ -67,19 +67,19 @@ output "shared_account_id" {
 }
 
 output "aft_execution_role_arn" {
-  description = "The ARN of the AFT execution role."
+  description = "The ARN of the AFT execution IAM role."
   value       = module.iam.aft_execution_role_arn
 }
 
 output "aft_account_provisioning_role_arn" {
-  description = "The ARN of the AFT account provisioning role."
+  description = "The ARN of the AFT account provisioning IAM role."
   value       = module.iam.aft_account_provisioning_role_arn
 }
 
 output "aft_admin_role_arn" {
-  description = "The ARN of the AFT admin role."
+  description = "The ARN of the AFT admin IAM role."
   value       = module.iam.aft_admin_role_arn
 }
 ```
 
-This `outputs.tf` file defines all the outputs for the resources and modules described in the Terraform script. Each output includes a description and references the appropriate resource or module attribute.
+This `outputs.tf` file provides all the necessary outputs for the resources and configurations defined in the Terraform script. Each output includes a description for clarity and references the appropriate module or resource.
