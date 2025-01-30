@@ -26,7 +26,7 @@ variable "aft_admin_role_name" {
 }
 
 variable "aft_admin_policy_arn" {
-  description = "ARN of the AWS-managed AdministratorAccess policy for AFT admin role."
+  description = "ARN of the AWS-managed policy for AFT Admin role."
   type        = string
   default     = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
@@ -43,22 +43,4 @@ variable "iam_resource_tags" {
     Purpose   = "AFT"
     ManagedBy = "Terraform"
   }
-}
-
-variable "output_aft_execution_role_arn" {
-  description = "Whether to output the ARN of the AFT execution role."
-  type        = bool
-  default     = true
-}
-
-variable "output_aft_account_provisioning_role_arn" {
-  description = "Whether to output the ARN of the AFT account provisioning role."
-  type        = bool
-  default     = true
-}
-
-variable "output_aft_admin_role_arn" {
-  description = "Whether to output the ARN of the AFT admin role."
-  type        = bool
-  default     = true
 }
