@@ -25,8 +25,31 @@ resource "aws_iam_role_policy_attachment" "aft_lambda_execution_policy_attachmen
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role" "aft_account_provisioning_role" {
+  name = "aft-account-provisioning-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "organizations.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Purpose   = "AFT"
+    ManagedBy = "Terraform"
+  }
+}
+
 resource "aws_iam_policy" "aft_account_provisioning_policy" {
-  name = "aft-account-provisioning-policy"
+  name        = "aft-account-provisioning-policy"
+  description = "Policy for managing accounts in AWS Organizations"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -40,28 +63,6 @@ resource "aws_iam_policy" "aft_account_provisioning_policy" {
           "iam:CreateServiceLinkedRole"
         ]
         Resource = "*"
-      }
-    ]
-  })
-
-  tags = {
-    Purpose   = "AFT"
-    ManagedBy = "Terraform"
-  }
-}
-
-resource "aws_iam_role" "aft_account_provisioning_role" {
-  name = "aft-account-provisioning-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "organizations.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
       }
     ]
   })

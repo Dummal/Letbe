@@ -39,7 +39,7 @@ variable "master_account_id" {
 variable "tags" {
   description = "A map of tags to apply to all resources."
   type        = map(string)
-  default     = {
+  default = {
     Environment = "Production"
     ManagedBy   = "Terraform"
   }

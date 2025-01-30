@@ -8,10 +8,17 @@ resource "aws_s3_bucket" "aft_logs" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = "aws:kms"
+        sse_algorithm   = "aws:kms"
         kms_master_key_id = aws_kms_key.aft_key.arn
       }
     }
+  }
+
+  block_public_access {
+    block_public_acls       = true
+    block_public_policy     = true
+    ignore_public_acls      = true
+    restrict_public_buckets = true
   }
 
   tags = {
@@ -19,15 +26,6 @@ resource "aws_s3_bucket" "aft_logs" {
     ManagedBy   = "Terraform"
     Name        = "AFT Logs"
   }
-}
-
-resource "aws_s3_bucket_public_access_block" "aft_logs" {
-  bucket = aws_s3_bucket.aft_logs.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 resource "aws_kms_key" "aft_key" {
@@ -95,13 +93,13 @@ resource "aws_dynamodb_table" "aft_requests" {
     type = "S"
   }
 
-  point_in_time_recovery {
-    enabled = true
-  }
-
   server_side_encryption {
     enabled     = true
     kms_key_arn = aws_kms_key.aft_key.arn
+  }
+
+  point_in_time_recovery {
+    enabled = true
   }
 
   tags = {
